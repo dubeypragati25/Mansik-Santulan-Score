@@ -2,234 +2,443 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Mental Health Signal — Student Wellness Analytics</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#F0651F" />
+<title>Mental Health Signal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css" />
-</head>S
+</head>
 <body>
 
-<div class="noise-overlay" aria-hidden="true"></div>
+<!-- ══════════════════════════ ICON SPRITE ══════════════════════════ -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="ic-male" viewBox="0 0 24 24"><circle cx="10" cy="14" r="6"/><path d="M14.5 9.5 20 4M15 4h5v5"/></symbol>
+    <symbol id="ic-female" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M12 15v6M9 18h6"/></symbol>
+    <symbol id="ic-highschool" viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M6 10.5V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-5.5"/></symbol>
+    <symbol id="ic-undergrad" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5V5.5Z"/><path d="M19 18v3H6.5A2.5 2.5 0 0 1 4 18.5"/></symbol>
+    <symbol id="ic-grad" viewBox="0 0 24 24"><path d="M3 7.5 12 4l9 3.5-9 3.5-9-3.5Z"/><path d="M7 12v4.2c0 .9 2.2 2 5 2s5-1.1 5-2V12"/><path d="M21 7.5v5"/></symbol>
+    <symbol id="ic-network" viewBox="0 0 24 24"><circle cx="12" cy="6" r="2.6"/><circle cx="5.5" cy="17" r="2.6"/><circle cx="18.5" cy="17" r="2.6"/><path d="M10.3 8.2 7.2 14.8M13.7 8.2l3.1 6.6M8.1 17h7.8"/></symbol>
+    <symbol id="ic-education" viewBox="0 0 24 24"><path d="M4 5.2A1.2 1.2 0 0 1 5.2 4H10a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H5.2A1.2 1.2 0 0 1 4 15.8V5.2Z"/><path d="M20 5.2A1.2 1.2 0 0 0 18.8 4H14a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h4.8a1.2 1.2 0 0 0 1.2-1.2V5.2Z"/></symbol>
+    <symbol id="ic-entertain" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M10 9.3v5.4l4.6-2.7L10 9.3Z"/></symbol>
+    <symbol id="ic-news" viewBox="0 0 24 24"><path d="M4 5h13v14H5.5A1.5 1.5 0 0 1 4 17.5V5Z"/><path d="M17 8h2.5A1.5 1.5 0 0 1 21 9.5v8a1.5 1.5 0 0 1-1.5 1.5H17"/><path d="M7 8.5h7M7 12h7M7 15.5h4"/></symbol>
+    <symbol id="ic-instagram" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17" cy="7" r="1.05" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="ic-tiktok" viewBox="0 0 24 24"><path d="M14 3.5v11.2a3.9 3.9 0 1 1-3.2-3.84"/><path d="M14 6.2c.7 1.8 2.3 3 4.4 3.1"/></symbol>
+    <symbol id="ic-facebook" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.7"/><path d="M14.6 8.4h-1.4c-.9 0-1.5.6-1.5 1.5v1.5m-1.6 0h4.3m-2.7 0v5.9"/></symbol>
+    <symbol id="ic-youtube" viewBox="0 0 24 24"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10.3 9.6v4.8l4.2-2.4-4.2-2.4Z"/></symbol>
+    <symbol id="ic-twitter" viewBox="0 0 24 24"><path d="M4 4.5 19.5 19.5M19.5 4.5 4 19.5"/></symbol>
+    <symbol id="ic-snapchat" viewBox="0 0 24 24"><path d="M12 3.4c2.6 0 4.3 1.9 4.3 4.4 0 1-.1 2-.1 2.6.5.4 1.2.4 1.8.2.6-.2 1 .5.5 1-.5.5-1.5.8-1.7 1.3-.2.6 1.3 2.9 3 3.3.4.1.4.6 0 .8-.9.4-2 .4-2.4.7-.3.3-.2 1-.7 1.1-.7.2-1.7-.5-2.7-.5-1 0-2 .7-2.7.5-.5-.1-.4-.8-.7-1.1-.4-.3-1.5-.3-2.4-.7-.4-.2-.4-.7 0-.8 1.7-.4 3.2-2.7 3-3.3-.2-.5-1.2-.8-1.7-1.3-.5-.5-.1-1.2.5-1 .6.2 1.3.2 1.8-.2 0-.6-.1-1.6-.1-2.6 0-2.5 1.7-4.4 4.3-4.4Z"/></symbol>
+    <symbol id="ic-linkedin" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="3.5"/><path d="M7.6 10.6v6M7.6 7.6v.1M11.4 16.6v-6m0 2c0-1.1.9-2 2-2s2 .9 2 2v4"/></symbol>
+    <symbol id="ic-whatsapp" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 1-11.8 7L4 20.2l1.3-4A8 8 0 1 1 20 12Z"/><path d="M9.4 9.1c.4-.1.7 0 .9.4l.5 1c.1.3 0 .6-.2.8l-.4.3c.5 1 1.2 1.7 2.2 2.2l.3-.4c.2-.2.5-.3.8-.2l1 .5c.4.2.5.5.4.9-.2.7-.9 1.1-1.6 1-2.3-.3-4.2-2.2-4.5-4.5-.1-.7.3-1.4 1-1.6Z"/></symbol>
+    <symbol id="ic-line" viewBox="0 0 24 24"><path d="M21 10.6c0-4-4-7.2-9-7.2s-9 3.2-9 7.2c0 3.6 3.2 6.6 7.5 7.1.3.1.7.2.8.5.1.3 0 .7 0 1l-.1.8c0 .3-.2 1 .9.6 1.1-.5 5.9-3.5 8-6h0c1.2-1.3 1.9-2.9 1.9-4Z"/><path d="M8 8.9v4.2m0-2.1h2.4M13.2 8.9v4.2h2.2M17.2 8.9v4.2"/></symbol>
+    <symbol id="ic-kakao" viewBox="0 0 24 24"><path d="M12 3.6c-4.8 0-8.7 3-8.7 6.8 0 2.4 1.6 4.6 4 5.8l-1 3.6c-.1.4.3.6.6.4l4.3-2.8c.3 0 .6.1.8.1 4.8 0 8.7-3 8.7-6.8S16.8 3.6 12 3.6Z"/><path d="M8.3 12.3V8.9m-1.4 0h2.8M12.8 12.3V8.9h1.4a1 1 0 0 1 0 2h-1.4"/></symbol>
+    <symbol id="ic-vk" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><path d="M7 9.6c.5 2.8 2.2 4.8 4.6 4.8h.7v-2m0 0c1 0 2.3 1 2.8 2m-2.8-2c1.3-.2 2.4-1.3 2.8-2.8"/></symbol>
+    <symbol id="ic-wechat" viewBox="0 0 24 24"><path d="M9 4.2c-3.3 0-6 2.2-6 4.9 0 1.5.8 2.9 2.1 3.8l-.6 2 2.3-1.1c.7.2 1.4.3 2.2.3"/><path d="M14.2 9.4c-2.9 0-5.2 1.9-5.2 4.2s2.3 4.2 5.2 4.2c.7 0 1.3-.1 1.9-.3l2 1-.5-1.7c1.1-.8 1.8-1.9 1.8-3.2 0-2.3-2.3-4.2-5.2-4.2Z"/></symbol>
+    <symbol id="ic-moon" viewBox="0 0 24 24"><path d="M20 14.2A8.4 8.4 0 0 1 9.8 4 8.4 8.4 0 1 0 20 14.2Z"/></symbol>
+    <symbol id="ic-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="ic-back" viewBox="0 0 24 24"><path d="M19 12H5M11 18l-6-6 6-6"/></symbol>
+    <symbol id="ic-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7"/></symbol>
+    <symbol id="ic-bed" viewBox="0 0 24 24"><path d="M3 18v-7M3 14h18v4M21 18v-3.5a3.5 3.5 0 0 0-3.5-3.5H10v3"/><circle cx="6.8" cy="8.8" r="1.8"/></symbol>
+    <symbol id="ic-phone" viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 5.5h3"/></symbol>
+    <symbol id="ic-run" viewBox="0 0 24 24"><circle cx="14.5" cy="4.8" r="1.9"/><path d="M12.4 20.5 14 15l-2.8-2.4.9-4.3 3.2 2.5 3 .6"/><path d="M11.2 12.6 8 13.6l-2 3.6M14 15l2.4 2.2 1 3.3"/></symbol>
+    <symbol id="ic-book" viewBox="0 0 24 24"><path d="M4 4.8A1.3 1.3 0 0 1 5.3 3.5H18a1 1 0 0 1 1 1v12.8H6.4A2.4 2.4 0 0 0 4 19.7V4.8Z"/><path d="M19 17.3v3.2H6.4A2.4 2.4 0 0 1 4 18.1"/></symbol>
+    <symbol id="ic-spark" viewBox="0 0 24 24"><path d="M12 3.5 13.9 9l5.6 1.9-5.6 1.9L12 18.4l-1.9-5.6L4.5 11 10.1 9 12 3.5Z"/></symbol>
+    <symbol id="ic-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-.6 4"/><path d="M20 5.5V11h-5.5"/></symbol>
+    <symbol id="ic-pulse" viewBox="0 0 24 24"><path d="M2 12h4.5l3-7.5 5 15 3-7.5H22"/></symbol>
+  </defs>
+</svg>
 
-<header class="site-header">
-  <div class="header-inner">
-    <span class="eyebrow">Student Wellness Analytics</span>
-    <h1 class="title">Mental Health <em>Signal</em></h1>
-    <p class="subtitle">A quick read on how habits, screen time, and stress are trending — modeled from your daily rhythm, not a diagnosis.</p>
-  </div>
-</header>
+<!-- ══════════════════════════ SHELL ══════════════════════════ -->
+<div class="shell" id="shell" data-phase="intro">
 
-<main class="layout">
-
-  <!-- FORM PANEL -->
-  <section class="panel form-panel" aria-labelledby="form-heading">
-    <form id="predict-form" novalidate>
-
-      <fieldset class="group">
-        <legend><span class="legend-index">01</span> Profile</legend>
-        <div class="grid grid-3">
-          <div class="field">
-            <label for="age">Age</label>
-            <input type="number" id="age" name="age" min="10" max="100" step="1" required placeholder="e.g. 21" />
-            <span class="hint">10–100</span>
-            <span class="error-msg" data-for="age"></span>
-          </div>
-          <div class="field">
-            <label for="gender">Gender</label>
-            <select id="gender" name="gender" required>
-              <option value="" disabled selected hidden>Select</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
-            <span class="error-msg" data-for="gender"></span>
-          </div>
-          <div class="field">
-            <label for="country">Country</label>
-            <input type="text" id="country" name="country" list="country-list" required placeholder="e.g. India" autocomplete="off" />
-            <datalist id="country-list">
-              <option value="India"></option>
-              <option value="USA"></option>
-              <option value="Canada"></option>
-              <option value="Australia"></option>
-              <option value="UK"></option>
-              <option value="Germany"></option>
-              <option value="Mexico"></option>
-              <option value="Turkey"></option>
-              <option value="France"></option>
-            </datalist>
-            <span class="hint">Not listed? Type it anyway.</span>
-            <span class="error-msg" data-for="country"></span>
-          </div>
-        </div>
-      </fieldset>
-
-      <fieldset class="group">
-        <legend><span class="legend-index">02</span> Academic &amp; Digital Habits</legend>
-        <div class="grid grid-2">
-          <div class="field">
-            <label for="academic_level">Academic level</label>
-            <select id="academic_level" name="academic_level" required>
-              <option value="" disabled selected hidden>Select</option>
-              <option value="High School">High School</option>
-              <option value="Undergraduate">Undergraduate</option>
-              <option value="Graduate">Graduate</option>
-            </select>
-            <span class="error-msg" data-for="academic_level"></span>
-          </div>
-          <div class="field">
-            <label for="most_used_platform">Most-used platform</label>
-            <select id="most_used_platform" name="most_used_platform" required>
-              <option value="" disabled selected hidden>Select</option>
-              <option value="Facebook">Facebook</option>
-              <option value="Instagram">Instagram</option>
-              <option value="Snapchat">Snapchat</option>
-              <option value="Twitter">Twitter</option>
-              <option value="YouTube">YouTube</option>
-              <option value="TikTok">TikTok</option>
-              <option value="LinkedIn">LinkedIn</option>
-              <option value="LINE">LINE</option>
-              <option value="KakaoTalk">KakaoTalk</option>
-              <option value="VKontakte">VKontakte</option>
-              <option value="WhatsApp">WhatsApp</option>
-              <option value="WeChat">WeChat</option>
-            </select>
-            <span class="error-msg" data-for="most_used_platform"></span>
-          </div>
-          <div class="field">
-            <label for="purpose_of_use">Primary purpose</label>
-            <select id="purpose_of_use" name="purpose_of_use" required>
-              <option value="" disabled selected hidden>Select</option>
-              <option value="Networking">Networking</option>
-              <option value="Education">Education</option>
-              <option value="Entertainment">Entertainment</option>
-              <option value="News">News</option>
-            </select>
-            <span class="error-msg" data-for="purpose_of_use"></span>
-          </div>
-          <div class="field">
-            <label for="avg_daily_usage_hours">Avg. daily screen time</label>
-            <div class="unit-input">
-              <input type="number" id="avg_daily_usage_hours" name="avg_daily_usage_hours" min="0" max="24" step="0.1" required placeholder="0.0" />
-              <span class="unit">hrs</span>
-            </div>
-            <span class="error-msg" data-for="avg_daily_usage_hours"></span>
-          </div>
-          <div class="field">
-            <label for="daily_unlocks">Daily phone unlocks</label>
-            <input type="number" id="daily_unlocks" name="daily_unlocks" min="0" step="1" required placeholder="e.g. 60" />
-            <span class="error-msg" data-for="daily_unlocks"></span>
-          </div>
-        </div>
-      </fieldset>
-
-      <fieldset class="group">
-        <legend><span class="legend-index">03</span> Lifestyle &amp; Stress</legend>
-        <div class="grid grid-3">
-          <div class="field">
-            <label for="study_hours">Study hours / day</label>
-            <div class="unit-input">
-              <input type="number" id="study_hours" name="study_hours" min="0" max="24" step="0.1" required placeholder="0.0" />
-              <span class="unit">hrs</span>
-            </div>
-            <span class="error-msg" data-for="study_hours"></span>
-          </div>
-          <div class="field">
-            <label for="physical_activity_hours">Physical activity / day</label>
-            <div class="unit-input">
-              <input type="number" id="physical_activity_hours" name="physical_activity_hours" min="0" max="24" step="0.1" required placeholder="0.0" />
-              <span class="unit">hrs</span>
-            </div>
-            <span class="error-msg" data-for="physical_activity_hours"></span>
-          </div>
-          <div class="field">
-            <label for="sleep_hours_per_night">Sleep / night</label>
-            <div class="unit-input">
-              <input type="number" id="sleep_hours_per_night" name="sleep_hours_per_night" min="0" max="24" step="0.1" required placeholder="0.0" />
-              <span class="unit">hrs</span>
-            </div>
-            <span class="error-msg" data-for="sleep_hours_per_night"></span>
-          </div>
-          <div class="field field-span">
-            <label for="stress_level">Perceived stress level</label>
-            <div class="segmented" id="stress_level_group" data-name="stress_level">
-              <button type="button" class="seg-btn" data-value="Low">Low</button>
-              <button type="button" class="seg-btn" data-value="Medium">Medium</button>
-              <button type="button" class="seg-btn" data-value="High">High</button>
-              <button type="button" class="seg-btn" data-value="Very High">Very High</button>
-            </div>
-            <input type="hidden" id="stress_level" name="stress_level" required />
-            <span class="error-msg" data-for="stress_level"></span>
-          </div>
-        </div>
-      </fieldset>
-
-      <div class="form-footer">
-        <button type="submit" class="submit-btn" id="submit-btn">
-          <span class="btn-label">Read my signal</span>
-          <span class="btn-spinner" aria-hidden="true"></span>
-        </button>
-      </div>
-    </form>
-  </section>
-
-  <!-- RESULT PANEL -->
-  <aside class="panel result-panel" aria-live="polite">
-    <div class="result-inner" id="result-inner">
-
-      <div class="state state-idle" id="state-idle">
-        <svg class="gauge gauge-idle" viewBox="0 0 240 160" aria-hidden="true">
-          <path class="gauge-track" d="M 30 140 A 100 100 0 0 1 210 140" />
-          <g class="gauge-ticks"></g>
-        </svg>
-        <p class="idle-label">Your score will appear here</p>
-        <p class="idle-copy">Fill in the form and submit to generate a predicted mental health score from 0–10.</p>
-      </div>
-
-      <div class="state state-loading" id="state-loading" hidden>
-        <div class="pulse-ring"></div>
-        <p class="loading-label">Reading the signal…</p>
-        <p class="loading-copy">Running your habits through the model.</p>
-      </div>
-
-      <div class="state state-result" id="state-result" hidden>
-        <svg class="gauge gauge-result" viewBox="0 0 240 160" aria-hidden="true">
-          <defs>
-            <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#D9534F"/>
-              <stop offset="45%" stop-color="#E3B341"/>
-              <stop offset="100%" stop-color="#4C9A78"/>
-            </linearGradient>
-          </defs>
-          <path class="gauge-track" d="M 30 140 A 100 100 0 0 1 210 140" />
-          <path class="gauge-fill" id="gauge-fill" d="M 30 140 A 100 100 0 0 1 210 140" />
-          <g class="gauge-ticks"></g>
-          <circle class="gauge-needle-hub" cx="120" cy="140" r="5" />
-        </svg>
-        <div class="score-readout">
-          <span class="score-number" id="score-number">0.0</span>
-          <span class="score-max">/10</span>
-        </div>
-        <p class="score-band" id="score-band">—</p>
-        <p class="score-context" id="score-context"></p>
-        <button type="button" class="reset-btn" id="reset-btn">Run another read</button>
-      </div>
-
-      <div class="state state-error" id="state-error" hidden>
-        <div class="error-icon" aria-hidden="true">!</div>
-        <p class="error-copy" id="error-copy"></p>
-        <button type="button" class="reset-btn" id="error-retry-btn">Try again</button>
-      </div>
-
+  <!-- ─────────── LEFT RAIL (desktop) ─────────── -->
+  <aside class="rail">
+    <div class="rail-glow" aria-hidden="true"></div>
+    <div class="rail-brand">
+      <span class="mark"><svg class="ico"><use href="#ic-pulse"/></svg></span>
+      <span class="wordmark">Mental Health Signal</span>
     </div>
+
+    <div class="rail-mid">
+      <div class="rail-hero">
+        <h2>Eight questions.<br/>One honest read.</h2>
+        <p>A quick model of how your sleep, screen time and stress are trending together.</p>
+      </div>
+      <ol class="rail-steps" id="rail-steps"></ol>
+    </div>
+
+    <p class="rail-legal">Informational only — not a clinical assessment.</p>
   </aside>
 
-</main>
+  <!-- ─────────── MAIN PANE ─────────── -->
+  <main class="pane">
 
-<footer class="site-footer">
-  <p>Built for informational purposes only — this is not a clinical assessment. If you're struggling, please talk to someone you trust.</p>
-</footer>
+    <header class="topbar" id="topbar">
+      <button type="button" class="icon-btn" id="back-btn" aria-label="Go back">
+        <svg class="ico"><use href="#ic-back"/></svg>
+      </button>
+      <div class="progress" id="progress" role="progressbar" aria-valuemin="1" aria-valuemax="8" aria-valuenow="1" aria-label="Progress"></div>
+      <span class="step-count" id="step-count">1<i>/8</i></span>
+    </header>
+
+    <div class="screens" id="screens">
+
+      <!-- 0 · INTRO -->
+      <section class="screen screen-plain is-active" data-screen="welcome">
+        <div class="screen-body hero-body">
+          <div class="hero-art" aria-hidden="true">
+            <span class="ripple"></span>
+            <span class="ripple"></span>
+            <span class="orb">
+              <svg viewBox="0 0 120 44"><path d="M6 22c9-19 15 19 24 0s15 19 24 0 15 19 24 0 15 19 24 0"/></svg>
+            </span>
+          </div>
+          <h1 class="hero-title">Mental Health Signal</h1>
+          <p class="hero-copy">8 questions. 60 seconds.<br/>Your balance score out of 10.</p>
+        </div>
+      </section>
+
+      <!-- 1 · GENDER + AGE -->
+      <section class="screen" data-screen="basics">
+        <div class="screen-body">
+          <p class="q-eyebrow">About you</p>
+          <h2 class="q-title">Let's start with the basics</h2>
+          <p class="q-sub">These place your rhythm against students like you.</p>
+
+          <div class="q-block">
+            <h3 class="q-label">Biological sex</h3>
+            <div class="opt-row" data-name="gender" role="radiogroup" aria-label="Biological sex">
+              <button type="button" class="opt opt-tile" data-value="Male" role="radio" aria-checked="false">
+                <svg class="ico ico-lg"><use href="#ic-male"/></svg><span>Male</span>
+              </button>
+              <button type="button" class="opt opt-tile" data-value="Female" role="radio" aria-checked="false">
+                <svg class="ico ico-lg"><use href="#ic-female"/></svg><span>Female</span>
+              </button>
+            </div>
+            <p class="err" data-err="gender"></p>
+          </div>
+
+          <div class="q-block">
+            <h3 class="q-label">Age <em>(years)</em></h3>
+            <div class="wheel" id="age-wheel" data-name="age">
+              <div class="wheel-caret" aria-hidden="true"></div>
+              <div class="wheel-track" id="age-track" tabindex="0" role="slider"
+                   aria-label="Age" aria-valuemin="10" aria-valuemax="100" aria-valuenow="21"></div>
+              <div class="wheel-mask wheel-mask-l" aria-hidden="true"></div>
+              <div class="wheel-mask wheel-mask-r" aria-hidden="true"></div>
+            </div>
+            <p class="err" data-err="age"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2 · COUNTRY + ACADEMIC LEVEL -->
+      <section class="screen" data-screen="context">
+        <div class="screen-body">
+          <p class="q-eyebrow">Context</p>
+          <h2 class="q-title">Where are you studying?</h2>
+          <p class="q-sub">Region and level both shift the baseline a little.</p>
+
+          <div class="q-block">
+            <h3 class="q-label">Country</h3>
+            <div class="combo" id="country-combo">
+              <input type="text" id="country" name="country" class="combo-input" autocomplete="off"
+                     placeholder="Start typing…" aria-label="Country" aria-expanded="false" role="combobox" aria-controls="country-list"/>
+              <div class="combo-list" id="country-list" role="listbox" hidden></div>
+            </div>
+            <div class="chips" id="country-chips"></div>
+            <p class="err" data-err="country"></p>
+          </div>
+
+          <div class="q-block">
+            <h3 class="q-label">Academic level</h3>
+            <div class="opt-stack" data-name="academic_level" role="radiogroup" aria-label="Academic level">
+              <button type="button" class="opt opt-bar" data-value="High School" role="radio" aria-checked="false">
+                <svg class="ico"><use href="#ic-highschool"/></svg><span>High School</span><i class="tick"><svg class="ico"><use href="#ic-check"/></svg></i>
+              </button>
+              <button type="button" class="opt opt-bar" data-value="Undergraduate" role="radio" aria-checked="false">
+                <svg class="ico"><use href="#ic-undergrad"/></svg><span>Undergraduate</span><i class="tick"><svg class="ico"><use href="#ic-check"/></svg></i>
+              </button>
+              <button type="button" class="opt opt-bar" data-value="Graduate" role="radio" aria-checked="false">
+                <svg class="ico"><use href="#ic-grad"/></svg><span>Graduate</span><i class="tick"><svg class="ico"><use href="#ic-check"/></svg></i>
+              </button>
+            </div>
+            <p class="err" data-err="academic_level"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3 · PLATFORM -->
+      <section class="screen" data-screen="platform">
+        <div class="screen-body">
+          <p class="q-eyebrow">Digital habits</p>
+          <h2 class="q-title">Which app takes the biggest bite of your day?</h2>
+          <p class="q-sub">Pick the one you open most — not the one you'd like to.</p>
+          <div class="grid-apps" data-name="most_used_platform" role="radiogroup" aria-label="Most used platform">
+            <button type="button" class="opt opt-app" data-value="Instagram"  role="radio" aria-checked="false"><svg class="ico"><use href="#ic-instagram"/></svg><span>Instagram</span></button>
+            <button type="button" class="opt opt-app" data-value="TikTok"     role="radio" aria-checked="false"><svg class="ico"><use href="#ic-tiktok"/></svg><span>TikTok</span></button>
+            <button type="button" class="opt opt-app" data-value="YouTube"    role="radio" aria-checked="false"><svg class="ico"><use href="#ic-youtube"/></svg><span>YouTube</span></button>
+            <button type="button" class="opt opt-app" data-value="Snapchat"   role="radio" aria-checked="false"><svg class="ico"><use href="#ic-snapchat"/></svg><span>Snapchat</span></button>
+            <button type="button" class="opt opt-app" data-value="Facebook"   role="radio" aria-checked="false"><svg class="ico"><use href="#ic-facebook"/></svg><span>Facebook</span></button>
+            <button type="button" class="opt opt-app" data-value="Twitter"    role="radio" aria-checked="false"><svg class="ico"><use href="#ic-twitter"/></svg><span>Twitter / X</span></button>
+            <button type="button" class="opt opt-app" data-value="WhatsApp"   role="radio" aria-checked="false"><svg class="ico"><use href="#ic-whatsapp"/></svg><span>WhatsApp</span></button>
+            <button type="button" class="opt opt-app" data-value="LinkedIn"   role="radio" aria-checked="false"><svg class="ico"><use href="#ic-linkedin"/></svg><span>LinkedIn</span></button>
+            <button type="button" class="opt opt-app" data-value="LINE"       role="radio" aria-checked="false"><svg class="ico"><use href="#ic-line"/></svg><span>LINE</span></button>
+            <button type="button" class="opt opt-app" data-value="KakaoTalk"  role="radio" aria-checked="false"><svg class="ico"><use href="#ic-kakao"/></svg><span>KakaoTalk</span></button>
+            <button type="button" class="opt opt-app" data-value="WeChat"     role="radio" aria-checked="false"><svg class="ico"><use href="#ic-wechat"/></svg><span>WeChat</span></button>
+            <button type="button" class="opt opt-app" data-value="VKontakte"  role="radio" aria-checked="false"><svg class="ico"><use href="#ic-vk"/></svg><span>VKontakte</span></button>
+          </div>
+          <p class="err" data-err="most_used_platform"></p>
+        </div>
+      </section>
+
+      <!-- 4 · PURPOSE -->
+      <section class="screen" data-screen="purpose">
+        <div class="screen-body">
+          <p class="q-eyebrow">Digital habits</p>
+          <h2 class="q-title">What mainly pulls you there?</h2>
+          <p class="q-sub">Your dominant reason for opening it.</p>
+          <div class="grid-purpose" data-name="purpose_of_use" role="radiogroup" aria-label="Primary purpose">
+            <button type="button" class="opt opt-card" data-value="Entertainment" role="radio" aria-checked="false">
+              <svg class="ico ico-xl"><use href="#ic-entertain"/></svg>
+              <span class="card-t">Entertainment</span><span class="card-s">Scrolling, reels, videos</span>
+            </button>
+            <button type="button" class="opt opt-card" data-value="Networking" role="radio" aria-checked="false">
+              <svg class="ico ico-xl"><use href="#ic-network"/></svg>
+              <span class="card-t">Networking</span><span class="card-s">Friends, chats, community</span>
+            </button>
+            <button type="button" class="opt opt-card" data-value="Education" role="radio" aria-checked="false">
+              <svg class="ico ico-xl"><use href="#ic-education"/></svg>
+              <span class="card-t">Education</span><span class="card-s">Study, courses, how-tos</span>
+            </button>
+            <button type="button" class="opt opt-card" data-value="News" role="radio" aria-checked="false">
+              <svg class="ico ico-xl"><use href="#ic-news"/></svg>
+              <span class="card-t">News</span><span class="card-s">Headlines, updates, discourse</span>
+            </button>
+          </div>
+          <p class="err" data-err="purpose_of_use"></p>
+        </div>
+      </section>
+
+      <!-- 5 · SCREEN TIME + UNLOCKS -->
+      <section class="screen" data-screen="screen-time">
+        <div class="screen-body">
+          <p class="q-eyebrow">Digital habits</p>
+          <h2 class="q-title">How much screen time, honestly?</h2>
+          <p class="q-sub">Check your phone's weekly report if you're unsure.</p>
+
+          <div class="q-block">
+            <div class="meter">
+              <div class="meter-head">
+                <svg class="ico ico-lg meter-ico"><use href="#ic-phone"/></svg>
+                <h3 class="q-label q-label-flush">Average daily use</h3>
+                <div class="readout"><b id="rd-usage">5.0</b><i>hrs</i></div>
+                <p class="meter-hint">Across all social apps</p>
+              </div>
+              <input type="range" class="slider" id="avg_daily_usage_hours" name="avg_daily_usage_hours"
+                     min="0" max="16" step="0.1" value="5" aria-label="Average daily usage hours"/>
+              <div class="scale"><span>0</span><span>4</span><span>8</span><span>12</span><span>16h</span></div>
+            </div>
+            <p class="err" data-err="avg_daily_usage_hours"></p>
+          </div>
+
+          <div class="q-block">
+            <div class="meter">
+              <div class="meter-head">
+                <svg class="ico ico-lg meter-ico"><use href="#ic-spark"/></svg>
+                <h3 class="q-label q-label-flush">Daily phone unlocks</h3>
+                <div class="readout"><b id="rd-unlocks">170</b><i>×</i></div>
+                <p class="meter-hint">Typical student: around 170 a day</p>
+              </div>
+              <input type="range" class="slider" id="daily_unlocks" name="daily_unlocks"
+                     min="0" max="400" step="1" value="170" aria-label="Daily phone unlocks"/>
+              <div class="scale"><span>0</span><span>100</span><span>200</span><span>300</span><span>400</span></div>
+            </div>
+            <p class="err" data-err="daily_unlocks"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6 · STUDY + ACTIVITY -->
+      <section class="screen" data-screen="routine">
+        <div class="screen-body">
+          <p class="q-eyebrow">Daily rhythm</p>
+          <h2 class="q-title">How do the rest of your hours split?</h2>
+          <p class="q-sub">A rough daily average is fine.</p>
+
+          <div class="q-block">
+            <div class="meter">
+              <div class="meter-head">
+                <svg class="ico ico-lg meter-ico"><use href="#ic-book"/></svg>
+                <h3 class="q-label q-label-flush">Study hours</h3>
+                <div class="readout"><b id="rd-study">3.0</b><i>hrs</i></div>
+                <p class="meter-hint">Focused work, per day</p>
+              </div>
+              <input type="range" class="slider" id="study_hours" name="study_hours"
+                     min="0" max="16" step="0.1" value="3" aria-label="Study hours per day"/>
+              <div class="scale"><span>0</span><span>4</span><span>8</span><span>12</span><span>16h</span></div>
+            </div>
+            <p class="err" data-err="study_hours"></p>
+          </div>
+
+          <div class="q-block">
+            <div class="meter">
+              <div class="meter-head">
+                <svg class="ico ico-lg meter-ico"><use href="#ic-run"/></svg>
+                <h3 class="q-label q-label-flush">Physical activity</h3>
+                <div class="readout"><b id="rd-activity">1.8</b><i>hrs</i></div>
+                <p class="meter-hint">Sport, gym, walking</p>
+              </div>
+              <input type="range" class="slider" id="physical_activity_hours" name="physical_activity_hours"
+                     min="0" max="8" step="0.1" value="1.8" aria-label="Physical activity hours per day"/>
+              <div class="scale"><span>0</span><span>2</span><span>4</span><span>6</span><span>8h</span></div>
+            </div>
+            <p class="err" data-err="physical_activity_hours"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7 · SLEEP -->
+      <section class="screen" data-screen="sleep">
+        <div class="screen-body">
+          <p class="q-eyebrow">Recovery</p>
+          <h2 class="q-title">How long do you actually sleep?</h2>
+          <p class="q-sub">On a normal night, not your best one.</p>
+
+          <div class="sleep-dial">
+            <svg viewBox="0 0 260 168" aria-hidden="true">
+              <path class="dial-track" d="M 30 148 A 100 100 0 0 1 230 148"/>
+              <path class="dial-fill" id="sleep-arc" d="M 30 148 A 100 100 0 0 1 230 148"/>
+              <g class="dial-ticks" id="sleep-ticks"></g>
+            </svg>
+            <div class="sleep-readout">
+              <svg class="ico sleep-moon"><use href="#ic-moon"/></svg>
+              <b id="rd-sleep">6.6</b><i>hours</i>
+            </div>
+          </div>
+
+          <input type="range" class="slider slider-wide" id="sleep_hours_per_night" name="sleep_hours_per_night"
+                 min="2" max="14" step="0.1" value="6.6" aria-label="Sleep hours per night"/>
+          <div class="scale scale-wide"><span>2</span><span>5</span><span>8</span><span>11</span><span>14h</span></div>
+          <p class="sleep-note" id="sleep-note">Most students land between 6 and 8 hours.</p>
+          <p class="err" data-err="sleep_hours_per_night"></p>
+        </div>
+      </section>
+
+      <!-- 8 · STRESS -->
+      <section class="screen" data-screen="stress">
+        <div class="screen-body">
+          <p class="q-eyebrow">The last one</p>
+          <h2 class="q-title">How stressed have you felt lately?</h2>
+          <p class="q-sub">Over the past couple of weeks, on the whole.</p>
+          <div class="stress-stack" data-name="stress_level" role="radiogroup" aria-label="Perceived stress level">
+            <button type="button" class="opt opt-stress s-low" data-value="Low" role="radio" aria-checked="false">
+              <span class="face" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17"/><circle class="eye" cx="14" cy="16.5" r="1.9"/><circle class="eye" cx="26" cy="16.5" r="1.9"/><path class="mouth" d="M13 24c2.6 3.4 11.4 3.4 14 0"/></svg></span>
+              <span class="stress-txt"><b>Low</b><small>Mostly calm and in control</small></span>
+              <i class="bar" aria-hidden="true"><s></s></i>
+            </button>
+            <button type="button" class="opt opt-stress s-med" data-value="Medium" role="radio" aria-checked="false">
+              <span class="face" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17"/><circle class="eye" cx="14" cy="16.5" r="1.9"/><circle class="eye" cx="26" cy="16.5" r="1.9"/><path class="mouth" d="M13.5 25.5c2.4 1.4 10.6 1.4 13 0"/></svg></span>
+              <span class="stress-txt"><b>Medium</b><small>Busy, but manageable</small></span>
+              <i class="bar" aria-hidden="true"><s></s></i>
+            </button>
+            <button type="button" class="opt opt-stress s-high" data-value="High" role="radio" aria-checked="false">
+              <span class="face" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17"/><circle class="eye" cx="14" cy="17" r="1.9"/><circle class="eye" cx="26" cy="17" r="1.9"/><path class="mouth" d="M14 27c1.9-2.2 10.1-2.2 12 0"/><path class="brow" d="M10.5 12.5 17 15M29.5 12.5 23 15"/></svg></span>
+              <span class="stress-txt"><b>High</b><small>Often stretched thin</small></span>
+              <i class="bar" aria-hidden="true"><s></s></i>
+            </button>
+            <button type="button" class="opt opt-stress s-vhigh" data-value="Very High" role="radio" aria-checked="false">
+              <span class="face" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17"/><circle class="eye" cx="14" cy="17.5" r="2.2"/><circle class="eye" cx="26" cy="17.5" r="2.2"/><path class="mouth" d="M13.5 28c2-3.2 11-3.2 13 0"/><path class="brow" d="M9.8 11.8 17 15.4M30.2 11.8 23 15.4"/></svg></span>
+              <span class="stress-txt"><b>Very High</b><small>Overwhelmed most days</small></span>
+              <i class="bar" aria-hidden="true"><s></s></i>
+            </button>
+          </div>
+          <p class="err" data-err="stress_level"></p>
+        </div>
+      </section>
+
+      <!-- 9 · LOADING -->
+      <section class="screen screen-plain" data-screen="loading">
+        <div class="screen-body load-body">
+          <div class="load-orb" aria-hidden="true"><i></i><i></i><i></i></div>
+          <h2 class="load-title">Reading your signal</h2>
+          <p class="load-copy" id="load-copy">Running your rhythm through the model…</p>
+        </div>
+      </section>
+
+      <!-- 10 · DASHBOARD -->
+      <section class="screen screen-plain" data-screen="result">
+        <div class="screen-body dash">
+
+          <div class="dash-hero">
+            <p class="dash-eyebrow">Your mental balance score</p>
+            <div class="gauge-wrap">
+              <svg class="gauge" viewBox="0 0 260 168" aria-hidden="true">
+                <defs>
+                  <linearGradient id="gaugeGrad" x1="0%" x2="100%">
+                    <stop offset="0%"   stop-color="#E0533C"/>
+                    <stop offset="45%"  stop-color="#F5A623"/>
+                    <stop offset="100%" stop-color="#17A673"/>
+                  </linearGradient>
+                </defs>
+                <path class="gauge-track" d="M 30 148 A 100 100 0 0 1 230 148"/>
+                <path class="gauge-fill" id="gauge-fill" d="M 30 148 A 100 100 0 0 1 230 148"/>
+                <g class="gauge-ticks" id="gauge-ticks"></g>
+              </svg>
+              <div class="gauge-center">
+                <span class="score" id="score-number">0.0</span>
+                <span class="score-max">out of 10</span>
+              </div>
+            </div>
+            <span class="band-chip" id="score-band">—</span>
+            <p class="dash-context" id="score-context"></p>
+          </div>
+
+          <div class="dash-section">
+            <h3 class="dash-h">Your daily rhythm</h3>
+            <div class="stat-grid" id="stat-grid"></div>
+          </div>
+
+          <div class="dash-section">
+            <h3 class="dash-h">What stands out</h3>
+            <ul class="insight-list" id="insight-list"></ul>
+            <p class="dash-fine">The score comes from the model. The notes here are general habit guidelines, not a clinical judgement.</p>
+          </div>
+
+          <div class="dash-actions">
+            <button type="button" class="btn btn-ghost" id="restart-btn">
+              <svg class="ico"><use href="#ic-refresh"/></svg> Start over
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11 · ERROR -->
+      <section class="screen screen-plain" data-screen="error">
+        <div class="screen-body err-body">
+          <div class="err-badge" aria-hidden="true">!</div>
+          <h2 class="err-title" id="error-title">Something went wrong</h2>
+          <p class="err-copy" id="error-copy"></p>
+          <button type="button" class="btn btn-solid" id="retry-btn">Try again</button>
+        </div>
+      </section>
+
+    </div>
+
+    <footer class="actionbar" id="actionbar">
+      <div class="ab-inner">
+        <p class="ab-hint" id="ab-hint"></p>
+        <button type="button" class="btn btn-solid btn-cta" id="cta-btn">
+          <span class="cta-label" id="cta-label">Get started</span>
+          <svg class="ico cta-arrow"><use href="#ic-arrow"/></svg>
+        </button>
+      </div>
+    </footer>
+
+  </main>
+</div>
 
 <script src="script.js"></script>
 </body>
