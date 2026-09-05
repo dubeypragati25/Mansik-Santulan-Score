@@ -328,6 +328,31 @@ body {
   max-width: 30ch;
 }
 
+/* credit — intro screen only */
+.hero-credit {
+  margin-top: 40px;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+}
+.credit-rule {
+  width: 44px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line-2) 45%, var(--line-2) 55%, transparent);
+}
+.hero-credit p {
+  margin: 0;
+  font-size: 13px; font-weight: 400;
+  letter-spacing: .02em;
+  color: var(--ink-3);
+}
+.hero-credit b {
+  font-weight: 600;
+  letter-spacing: .01em;
+  color: var(--ink);
+}
+@media (min-width: 900px) {
+  .hero-credit { margin-top: 46px; }
+  .hero-credit p { font-size: 13.5px; }
+}
+
 /* =========================================================
    OPTIONS
    ========================================================= */
