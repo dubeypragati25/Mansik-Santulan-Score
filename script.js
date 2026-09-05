@@ -384,6 +384,7 @@
       });
       return;
     }
+    if (index === 0) warmUp();
     if (index < FLOW.length - 1) {
       index += 1;
       renderStep();
@@ -405,7 +406,16 @@
     "Comparing you to 5,000 students…",
     "Almost there…",
   ];
-  let loadTimer;
+  let loadTimer, slowTimer;
+
+  // The API sleeps when idle and can take ~30-60s to wake. Ping it as soon
+  // as the user starts, so it is awake by the time they reach the end.
+  let warmed = false;
+  function warmUp() {
+    if (warmed) return;
+    warmed = true;
+    fetch(`${API_BASE}/`, { method: "GET" }).catch(() => {});
+  }
 
   function buildPayload() {
     return {
@@ -432,16 +442,29 @@
     const copy = $("#load-copy");
     let i = 0;
     copy.textContent = LOAD_LINES[0];
-    clearInterval(loadTimer);
+    copy.style.opacity = "1";
+    stopLoading();
     loadTimer = setInterval(() => {
       i = (i + 1) % LOAD_LINES.length;
       copy.style.opacity = "0";
       setTimeout(() => { copy.textContent = LOAD_LINES[i]; copy.style.opacity = "1"; }, 250);
     }, 1900);
+
+    // A slow first response means the server is cold — say so, don't just spin.
+    slowTimer = setTimeout(() => {
+      clearInterval(loadTimer);
+      copy.textContent = "The server sleeps when idle. Waking it up — this can take up to a minute.";
+      copy.style.opacity = "1";
+    }, 9000);
+  }
+
+  function stopLoading() {
+    clearInterval(loadTimer);
+    clearTimeout(slowTimer);
   }
 
   function showError(title, copy) {
-    clearInterval(loadTimer);
+    stopLoading();
     $("#error-title").textContent = title;
     $("#error-copy").textContent = copy;
     goTo("error");
@@ -463,17 +486,46 @@
     return matched;
   }
 
+  // Bounded request — without this a cold server can hang the loading
+  // screen forever, since it has no back button of its own.
+  const REQUEST_TIMEOUT = 60000;
+
+  async function postPrediction() {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), REQUEST_TIMEOUT);
+    try {
+      return await fetch(`${API_BASE}/predict`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(buildPayload()),
+        signal: ctrl.signal,
+      });
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   async function submit() {
     clearErrs();
     showLoading();
 
+    let res;
     try {
-      const res = await fetch(`${API_BASE}/predict`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(buildPayload()),
-      });
+      res = await postPrediction();
+    } catch {
+      // A cold server often drops the request that wakes it — retry once.
+      try {
+        res = await postPrediction();
+      } catch {
+        showError(
+          "Can't reach the server",
+          "The prediction service didn't respond in time. It sleeps when idle and can take a minute to wake up — please try again."
+        );
+        return;
+      }
+    }
 
+    try {
       if (res.status === 422) {
         const body = await res.json().catch(() => null);
         const matched = body && applyServerValidation(body.detail);
@@ -506,8 +558,8 @@
       renderDashboard(data.predicted_mental_health_score);
     } catch {
       showError(
-        "Can't reach the server",
-        "We couldn't connect to the prediction service. It may be waking up from sleep — wait a moment and try again."
+        "Unexpected response",
+        "The server replied, but we couldn't read the result. Please try again."
       );
     }
   }
@@ -549,7 +601,7 @@
   ];
 
   function renderDashboard(score) {
-    clearInterval(loadTimer);
+    stopLoading();
 
     const clamped = Math.max(0, Math.min(10, score));
     const band = bandFor(clamped);
